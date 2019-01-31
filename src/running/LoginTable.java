@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,6 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class LoginTable extends JFrame {
 
@@ -33,12 +37,34 @@ public class LoginTable extends JFrame {
 	private JTextField textField_7;
 
 	 static ArrayList<ServiceGirls> girlsList = new ArrayList<>();
+	 private JTable table;
 	  public static ArrayList<ServiceGirls> getListGirls() {
 			return girlsList;
 		}
 	  public void setListSP(ArrayList<ServiceGirls> girlsList) {
 			this.girlsList = girlsList;
 		}
+	  Vector vTittle = new Vector();
+	  Vector vLine = new Vector();
+	  Vector vNew = new Vector();
+	  
+	  DefaultTableModel dtm = new DefaultTableModel();
+	  
+	  void Tittle() {
+		  vTittle.add("Code");
+		  vTittle.add("Name");
+		  vTittle.add("Age");
+		  vTittle.add("Body");
+	  }
+	  void add(ServiceGirls girl) {
+		  vNew = new Vector<>();
+		  vNew.add(girl.getJobCode());
+		  vNew.add(girl.getName());
+		  vNew.add(girl.getAge());
+		  vNew.add(girl.getBody());
+		  vLine.add(vNew);
+	  }
+	  
 	/**
 	 * Launch the application.
 	 */
@@ -48,6 +74,7 @@ public class LoginTable extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginTable() {
+		Tittle();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 323);
 		contentPane = new JPanel();
@@ -99,6 +126,7 @@ public class LoginTable extends JFrame {
 				if (textField_2.getText().length()==0 || textField_3.getText().length()==0 || textField_4.getText().length()==0 || textField_5.getText().length()==0 || textField_6.getText().length()==0 || textField_7.getText().length()==0) {
 					JOptionPane.showMessageDialog(null, "You must type all Girls information");
 				} else {
+					ServiceGirls girl = null;
 					String name = textField_2.getText();
 					int code = Integer.parseInt(textField_3.getText());
 					int age = Integer.parseInt(textField_4.getText());
@@ -108,13 +136,16 @@ public class LoginTable extends JFrame {
 					if (code !=1 && code !=2)
 						JOptionPane.showMessageDialog(null, "Only accept Karaoke: code 1 and Massage: code 2");
 					else {JOptionPane.showMessageDialog(null, "Add girl successful");
-					if (code ==2)
-						girlsList.add(new MassageGirls(code, name, age, body, worktimes, rank));
-					else 
-						girlsList.add(new KaraokeGirls(code, name, age, body, worktimes, rank));
-					}
-					boolean save = FileFactory.saveFile(girlsList, "E:/svg.dat");
+					if (code ==2) 
+						girl = new MassageGirls(code, name, age, body, worktimes, rank);
+					 else 
+						girl = new KaraokeGirls(code, name, age, body, worktimes, rank);
 					
+					add(girl);
+						dtm.setDataVector(vLine, vTittle);
+					table.setModel(dtm);
+					boolean save = FileFactory.saveFile(girlsList, "E:/svg.dat");
+					}
 					}
 			}
 		});
@@ -172,5 +203,28 @@ public class LoginTable extends JFrame {
 		textField_7.setColumns(10);
 		textField_7.setBounds(323, 242, 86, 20);
 		contentPane.add(textField_7);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(207, 128, -176, 96);
+		contentPane.add(scrollPane);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 128, 217, 146);
+		contentPane.add(scrollPane_1);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null},
+			},
+			new String[] {
+				"Code", "Name", "Age", "Body"
+			}
+		));
+		table.getColumnModel().getColumn(0).setPreferredWidth(49);
+		table.getColumnModel().getColumn(1).setPreferredWidth(107);
+		table.getColumnModel().getColumn(2).setPreferredWidth(41);
+		table.getColumnModel().getColumn(3).setPreferredWidth(100);
+		scrollPane_1.setViewportView(table);
 	}
 }
