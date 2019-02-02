@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Database.ServiceGirls;
+import customer.Customer;
 import fileFactory.FileFactory;
 
 import javax.swing.JButton;
@@ -27,17 +28,21 @@ public class CallGirl extends JFrame {
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
+	
+	private double money =0;
 
 	/**
 	 * Launch the application.
 	 */
 	ArrayList<ServiceGirls> girlsList = LoginTable.getListGirls();
+	ArrayList<Customer> customerList = new ArrayList<>();
 	
 
 	/**
 	 * Create the frame.
 	 */
 	public CallGirl() {
+		customerList.add(new Customer("1", "Khai", 25, 0));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -76,24 +81,38 @@ public class CallGirl extends JFrame {
 		textField_1.setColumns(10);
 		textField_1.setBounds(315, 51, 86, 20);
 		contentPane.add(textField_1);
-
-		JButton btnPay = new JButton("Pay");
-		btnPay.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnPay.setBounds(315, 133, 89, 23);
-		contentPane.add(btnPay);
+		
+		JLabel label_2 = new JLabel("Girl Name");
+		JLabel label_3 = new JLabel("Job Code");
+		textField_3 = new JTextField();
+		JComboBox comboBox = new JComboBox();
+		
 
 		JButton button = new JButton("Call Girl");
 		button.setBounds(10, 133, 96, 23);
 		contentPane.add(button);
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String name = textField_3.getText();
+				int code;
+				if(comboBox.getSelectedIndex()==0) code =1;
+				else code =2;
+				for (ServiceGirls girl: girlsList) {
+					if(name.equals(girl.getName()) && code==girl.getJobCode()) {
+						money += girl.getMoney();
+					}
+				}
+				
+			}
+		});
+		
 
-		JLabel label_2 = new JLabel("Girl Name");
 		label_2.setBounds(10, 171, 75, 14);
 		contentPane.add(label_2);
 
-		JLabel label_3 = new JLabel("Job Code");
+		
 		label_3.setBounds(10, 204, 75, 14);
 		contentPane.add(label_3);
 
@@ -106,12 +125,36 @@ public class CallGirl extends JFrame {
 		textField_2.setBounds(104, 231, 86, 20);
 		contentPane.add(textField_2);
 
-		JComboBox comboBox = new JComboBox();
+		JButton btnPay = new JButton("Pay");
+		btnPay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		btnPay.setBounds(315, 133, 89, 23);
+		contentPane.add(btnPay);
+		btnPay.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Your total money: "+money);
+				String id = textField.getText();
+				String name = textField_1.getText();
+				for (Customer c: customerList) {
+					if(c.getId().equals(id)&& c.getName().equals(name)) {
+						c.setTotalMoney(c.getTotalMoney()+money);
+						JOptionPane.showMessageDialog(null, "All total money: "+c.getTotalMoney());
+					}
+				}
+			}
+		});
+		
+		
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Karaoke", "Massage"}));
 		comboBox.setBounds(104, 199, 86, 20);
 		contentPane.add(comboBox);
 
-		textField_3 = new JTextField();
+		
 		textField_3.setColumns(10);
 		textField_3.setBounds(104, 168, 86, 20);
 		contentPane.add(textField_3);

@@ -140,7 +140,7 @@ public class LoginTable extends JFrame {
 						girl = new MassageGirls(code, name, age, body, worktimes, rank);
 					 else 
 						girl = new KaraokeGirls(code, name, age, body, worktimes, rank);
-					
+					girlsList.add(girl);
 					add(girl);
 						dtm.setDataVector(vLine, vTittle);
 					table.setModel(dtm);
@@ -220,11 +220,15 @@ public class LoginTable extends JFrame {
 			new String[] {
 				"Code", "Name", "Age", "Body"
 			}
-		));
-		table.getColumnModel().getColumn(0).setPreferredWidth(49);
-		table.getColumnModel().getColumn(1).setPreferredWidth(107);
-		table.getColumnModel().getColumn(2).setPreferredWidth(41);
-		table.getColumnModel().getColumn(3).setPreferredWidth(100);
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		
 		scrollPane_1.setViewportView(table);
 	}
 }

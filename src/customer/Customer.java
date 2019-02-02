@@ -1,14 +1,14 @@
 package customer;
 
 public class Customer {
-	private int id;
+	private String id;
 	private String name;
 	private int age;
 	private double totalMoney;
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -29,7 +29,7 @@ public class Customer {
 	public void setTotalMoney(double totalMoney) {
 		this.totalMoney = totalMoney;
 	}
-	public Customer(int id, String name, int age, double totalMoney) {
+	public Customer(String id, String name, int age, double totalMoney) {
 		super();
 		this.id = id;
 		this.name = name;
